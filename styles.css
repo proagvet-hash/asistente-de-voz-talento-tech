@@ -64,12 +64,51 @@ ul {
     cursor: pointer;
     transition: var(--transition);
     border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+    /* Essential for ripple */
+    z-index: 1;
 }
+
+.ripple {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+
 
 .btn-primary {
     background: linear-gradient(135deg, var(--primary-gold), var(--primary-gold-dark));
     color: var(--dark-grey);
     box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: 0.5s;
+}
+
+.btn-primary:hover::after {
+    left: 100%;
 }
 
 .btn-primary:hover {
@@ -115,6 +154,19 @@ ul {
     font-size: 1.5rem;
     font-weight: 700;
     letter-spacing: 1px;
+    animation: slideRight 1s ease-out;
+}
+
+@keyframes slideRight {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .logo-gold {
@@ -131,14 +183,62 @@ nav ul {
     gap: 30px;
 }
 
+nav ul li {
+    animation: slideDown 1s ease-out backwards;
+}
+
+nav ul li:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+nav ul li:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+nav ul li:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+nav ul li:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 nav a {
     font-size: 0.95rem;
     font-weight: 500;
     color: var(--secondary-silver-light);
+    position: relative;
+}
+
+nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: var(--primary-gold);
+    transition: width 0.3s ease;
 }
 
 nav a:hover {
     color: var(--primary-gold);
+}
+
+nav a:hover::after {
+    width: 100%;
 }
 
 .btn-nav {
@@ -146,6 +246,21 @@ nav a:hover {
     padding: 8px 20px;
     border-radius: 30px;
     color: var(--primary-gold);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(212, 175, 55, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+    }
 }
 
 .btn-nav:hover {
@@ -157,6 +272,12 @@ nav a:hover {
     display: none;
     font-size: 1.5rem;
     cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.hamburger:hover {
+    transform: rotate(90deg);
+    color: var(--primary-gold);
 }
 
 /* Hero Section */
@@ -180,7 +301,23 @@ nav a:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(51, 51, 51, 0.8));
+    background: linear-gradient(-45deg, rgba(26, 26, 26, 0.9), rgba(51, 51, 51, 0.8), #1a1a1a, #000000);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 .hero-content {
@@ -205,6 +342,33 @@ nav a:hover {
     display: flex;
     gap: 20px;
     justify-content: center;
+    margin-bottom: 40px;
+}
+
+.scroll-indicator {
+    font-size: 2rem;
+    color: var(--primary-gold);
+    animation: bounce 2s infinite;
+    cursor: pointer;
+}
+
+@keyframes bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-10px);
+    }
+
+    60% {
+        transform: translateY(-5px);
+    }
 }
 
 /* Animations */
@@ -227,6 +391,25 @@ nav a:hover {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.hero h1 span.text-gold {
+    display: inline-block;
+    animation: float 3s ease-in-out infinite;
 }
 
 /* Sections Global */
@@ -256,13 +439,15 @@ nav a:hover {
 
 .card {
     background: var(--medium-grey);
-    padding: 40px 30px;
     border-radius: 15px;
-    text-align: center;
     border: 1px solid var(--glass-border);
     transition: var(--transition);
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    /* Remove padding to let image fill header */
 }
 
 .card:hover {
@@ -271,10 +456,26 @@ nav a:hover {
     border-color: var(--primary-gold);
 }
 
+.card-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 2px solid var(--primary-gold);
+}
+
+.card-content {
+    padding: 30px;
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .card-icon {
     font-size: 3rem;
     color: var(--secondary-silver);
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     transition: var(--transition);
 }
 
@@ -286,6 +487,7 @@ nav a:hover {
 .card h3 {
     margin-bottom: 15px;
     font-size: 1.5rem;
+    color: var(--white);
 }
 
 .card p {
@@ -319,6 +521,13 @@ nav a:hover {
     opacity: 0.5;
     margin-bottom: -20px;
     z-index: 0;
+    transition: all 0.3s ease;
+}
+
+.feature-item:hover .feature-number {
+    color: var(--primary-gold);
+    opacity: 0.2;
+    transform: scale(1.1);
 }
 
 .feature-text {
@@ -371,12 +580,15 @@ nav a:hover {
     border-radius: 8px;
     color: var(--white);
     font-family: inherit;
+    transition: all 0.3s ease;
 }
 
 .contact-form input:focus,
 .contact-form select:focus {
     outline: none;
     border-color: var(--primary-gold);
+    transform: scale(1.02);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
 }
 
 /* Footer */
@@ -415,6 +627,7 @@ footer {
     background: var(--primary-gold);
     color: var(--dark-grey);
     border-color: var(--primary-gold);
+    transform: translateY(-5px);
 }
 
 /* Responsive */
@@ -446,16 +659,63 @@ footer {
 
 
 }
-}
+
 
 /* Scroll Animations */
 .fade-in-section {
     opacity: 0;
     transform: translateY(30px);
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: opacity, transform;
 }
 
 .fade-in-section.visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+.card:hover .card-image {
+    transform: scale(1.05);
+    transition: transform 0.5s ease;
+}
+
+.card-image {
+    transition: transform 0.5s ease;
+}
+
+/* Back to Top Button */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: rgba(212, 175, 55, 0.8);
+    color: var(--dark-grey);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s ease;
+    z-index: 999;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+}
+
+.back-to-top.active {
+    opacity: 1;
+    pointer-events: auto;
+    bottom: 30px;
+    /* Ensure it stays in place */
+}
+
+.back-to-top:hover {
+    background: var(--primary-gold);
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+    color: var(--dark-grey);
+    /* Ensure text color stays dark */
 }
